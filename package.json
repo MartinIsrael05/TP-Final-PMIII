@@ -10,9 +10,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "seed": "node --env-file=.env.local scripts/seed.js",
     "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"tests/*.test.js\""
   },
   "dependencies": {
+    "@vercel/blob": "^2.9.0",
     "firebase": "^13.3.0",
     "firebase-admin": "^14.5.1",
     "next": "16.4.6",

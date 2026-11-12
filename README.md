@@ -42,6 +42,8 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 
 ## Instalación
 
+Requiere **Node.js 22** o superior (lo pide `firebase-admin`; también está fijado en `engines` del `package.json` para Vercel).
+
 ```bash
 git clone https://github.com/MartinIsrael05/TP-Final-PMIII.git
 cd TP-Final-PMIII

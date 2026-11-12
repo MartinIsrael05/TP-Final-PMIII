@@ -40,6 +40,9 @@ export default function UserMenu() {
 
   return (
     <div className="flex items-center gap-3 text-sm">
+      <Link href="/placard" className="font-medium hover:underline">
+        Mi placard
+      </Link>
       <Link href="/hoy" className="flex items-center gap-2 font-medium hover:underline">
         <span
           aria-hidden="true"

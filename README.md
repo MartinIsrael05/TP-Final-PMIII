@@ -2,6 +2,8 @@
 
 Una webapp que, según el clima de donde estás, te arma el outfit del día con la ropa de tu propio placard y te sugiere paletas de colores que combinan con el día.
 
+**Demo:** https://pilcha-ropa.vercel.app
+
 TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/lamaro/maimo-2026-tp-final
 
 > README en construcción. Se completa al cierre del proyecto con descripción, benchmark, modelo de datos, mapa de navegación, opcionales, usuario de prueba, capturas y reflexión sobre el uso de IA.

@@ -7,7 +7,7 @@
 // 3. Desde ahí el servidor sabe quién es el usuario leyendo esa cookie.
 import { cookies } from "next/headers";
 import { FieldValue } from "firebase-admin/firestore";
-import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { SESSION_COOKIE, SESSION_DURACION_MS } from "@/lib/auth/session";
 
 // Firebase recomienda crear la sesión solo si el login fue reciente,
@@ -26,6 +26,10 @@ export async function POST(request) {
   if (typeof idToken !== "string" || !idToken) {
     return Response.json({ error: "Falta el token" }, { status: 400 });
   }
+
+  // Fuera del try: si Firebase Admin está mal configurado tiene que dar
+  // error 500 (y quedar en los logs), no "token inválido".
+  const adminAuth = getAdminAuth();
 
   let decoded;
   try {
@@ -71,7 +75,7 @@ export async function DELETE() {
 // La primera vez que alguien entra (registro con email o primer login con
 // Google) creamos su documento con los valores por defecto del perfil.
 async function crearUsuarioSiNoExiste(decoded, nombreDelForm) {
-  const ref = adminDb.collection("users").doc(decoded.uid);
+  const ref = getAdminDb().collection("users").doc(decoded.uid);
   const snap = await ref.get();
   if (snap.exists) return;
 

@@ -21,6 +21,7 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 
 - **Cache Components desactivado.** `create-next-app` lo activa por defecto en Next.js 16. Lo apagamos para usar el modelo de caché clásico: el layout privado puede leer la cookie de sesión directamente y las llamadas al clima se cachean con `fetch(..., { next: { revalidate: 1800 } })`.
 - **`proxy.js` en lugar de `middleware.js`.** En Next.js 16 `middleware.js` se renombró a `proxy.js`.
+- **La ubicación y el horario van en la URL** (`/?lat=...&lon=...&ciudad=...&desde=9&hasta=20`). Así la página pide el clima en el servidor con caché de 30 minutos y el link se puede compartir. Las coordenadas se redondean a 2 decimales (~1 km) para no exponer la ubicación exacta.
 
 ## Librerías
 

@@ -21,6 +21,10 @@ export default async function HomePage({ searchParams }) {
     ? { desde: user.horaSalida, hasta: user.horaVuelta }
     : undefined;
   const { desde, hasta } = leerHorario(params, horarioPerfil);
+  // Solo lo que el motor necesita para ajustar la temperatura a la persona.
+  const perfil = user
+    ? { sensibilidad: user.sensibilidad, ajusteTermico: user.ajusteTermico }
+    : null;
 
   return (
     <div className="flex flex-col gap-10">
@@ -50,7 +54,13 @@ export default async function HomePage({ searchParams }) {
               key={`${ubicacion.lat},${ubicacion.lon},${desde},${hasta}`}
               fallback={<ClimaSkeleton />}
             >
-              <ClimaDelDia ubicacion={ubicacion} desde={desde} hasta={hasta} />
+              <ClimaDelDia
+                ubicacion={ubicacion}
+                desde={desde}
+                hasta={hasta}
+                perfil={perfil}
+                logueado={Boolean(user)}
+              />
             </Suspense>
           </>
         )}

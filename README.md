@@ -64,6 +64,7 @@ La app queda en http://localhost:3000.
 | `npm run build` | Build de producción |
 | `npm run start` | Sirve el build |
 | `npm run lint` | ESLint |
+| `npm test` | Pruebas del motor de recomendación y de colores (`node:test`, sin dependencias) |
 
 ## Variables de entorno
 

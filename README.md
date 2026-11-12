@@ -22,6 +22,23 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 - **Cache Components desactivado.** `create-next-app` lo activa por defecto en Next.js 16. Lo apagamos para usar el modelo de caché clásico: el layout privado puede leer la cookie de sesión directamente y las llamadas al clima se cachean con `fetch(..., { next: { revalidate: 1800 } })`.
 - **`proxy.js` en lugar de `middleware.js`.** En Next.js 16 `middleware.js` se renombró a `proxy.js`.
 
+## Librerías
+
+| Librería | Para qué |
+| --- | --- |
+| `firebase` | Login con email/contraseña y Google desde el navegador |
+| `firebase-admin` | Verificar sesiones y escribir en Firestore desde el servidor. Es la única forma de validar en el servidor quién es el usuario |
+
+## Autenticación
+
+1. El usuario se loguea con Firebase Auth en el navegador y obtiene un ID token.
+2. El cliente manda el token a `POST /api/session`. El servidor lo verifica con Firebase Admin y lo cambia por una session cookie `httpOnly` de 5 días. Si es el primer ingreso, crea el documento `users/{uid}`.
+3. `proxy.js` redirige a `/login` si alguien entra a una ruta privada sin la cookie. Es un chequeo rápido que no valida la cookie.
+4. El layout privado y las Server Actions llaman a `getCurrentUser()` (`lib/auth/session.js`), que sí verifica la cookie con Firebase Admin.
+5. Para salir, `DELETE /api/session` borra la cookie y el cliente cierra la sesión de Firebase.
+
+`AuthContext` guarda el usuario del lado del cliente solo para la interfaz (nombre y botón de salir).
+
 ## Instalación
 
 ```bash

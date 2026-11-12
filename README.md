@@ -30,6 +30,8 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 | `firebase` | Login con email/contraseña y Google desde el navegador |
 | `firebase-admin` | Verificar sesiones y escribir en Firestore desde el servidor. Es la única forma de validar en el servidor quién es el usuario |
 
+**Override de `jose`.** `firebase-admin` usa `jwks-rsa`, que carga `jose` con `require()`. Desde `jose` 6 la librería es solo ESM, y en el runtime de Vercel ese `require()` falla (`ERR_REQUIRE_ESM`) y tira abajo todas las rutas que usan Firebase Admin. En `package.json` forzamos `jose` 5 solo para `jwks-rsa` (`overrides`), que trae versión CommonJS y tiene las mismas dos funciones que usa (`importJWK` y `exportSPKI`).
+
 ## Autenticación
 
 1. El usuario se loguea con Firebase Auth en el navegador y obtiene un ID token.

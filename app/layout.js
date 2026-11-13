@@ -14,7 +14,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Para que las URLs de Open Graph salgan absolutas (las pide el estándar).
+// En Vercel usamos el dominio del deploy, que viene en una variable propia
+// de la plataforma; en local, localhost.
+const sitio = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata = {
+  metadataBase: new URL(sitio),
   title: {
     default: "PILCHA",
     template: "%s | PILCHA",

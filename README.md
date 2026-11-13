@@ -39,6 +39,15 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 - **Filtros en la URL.** El listado es un Server Component y los filtros son un `<form method="GET">` común: no hace falta estado de cliente y la búsqueda se puede compartir.
 - **Foto opcional** a Vercel Blob. Si se reemplaza o se elimina la prenda, se borra la foto vieja.
 
+## Paletas
+
+- **Una paleta por condición del clima**: `soleado-calido`, `soleado-templado`, `nublado`, `lluvia`, `frio` y `noche`. `condicionPaleta()` (`lib/clima.js`) decide cuál corresponde al día y `lib/paletas.js` tiene los nombres, los resúmenes y la explicación de cada armonía.
+- **El id del documento es la clave de clima**, así `/paletas/[clima]` es una lectura directa por id y volver a correr el seed actualiza las paletas en lugar de duplicarlas.
+- **Rutas públicas** `/paletas` y `/paletas/[clima]`, prerenderizadas con `generateStaticParams()` y revalidadas cada hora. La metadata es dinámica y la imagen de Open Graph se genera con `next/og` a partir de los colores de la paleta.
+- **`/hoy` se tiñe con la paleta del día.** `TemaPaleta` expone los colores como variables CSS y el tinte se arma con `color-mix()` sobre el fondo de la app: el bloque cambia de tono según el clima, pero el texto sigue sobre un fondo casi blanco y el contraste no depende de los colores de la paleta. Las variables se definen en ese componente y no en el layout de `/hoy` porque la paleta depende del pronóstico, que llega dentro de `<Suspense>`.
+- **El color del texto sobre cada muestra lo decide `textoSobre()`** (`lib/colores.js`), que compara el contraste real de WCAG contra el claro y el oscuro de la app. Una prueba verifica que los 30 colores del seed queden siempre por encima de 4.5:1.
+- **Si las paletas no están cargadas la app funciona igual**: el motor ya tomaba la paleta como opcional y las páginas muestran un aviso para correr el seed. `listarPaletasOpcional()` y `getPaletaOpcional()` no tiran error, así el build no depende de tener credenciales de Firebase.
+
 ## Autenticación
 
 1. El usuario se loguea con Firebase Auth en el navegador y obtiene un ID token.
@@ -71,8 +80,8 @@ La app queda en http://localhost:3000.
 | `npm run build` | Build de producción |
 | `npm run start` | Sirve el build |
 | `npm run lint` | ESLint |
-| `npm run seed` | Crea el usuario de prueba con un placard cargado (necesita `.env.local`) |
-| `npm test` | Pruebas del motor de recomendación y de colores (`node:test`, sin dependencias) |
+| `npm run seed` | Crea el usuario de prueba con un placard cargado y carga las paletas (necesita `.env.local`) |
+| `npm test` | Pruebas del motor, los colores y las paletas (`node:test`, sin dependencias) |
 
 ## Variables de entorno
 
@@ -80,7 +89,7 @@ Ver `.env.example`. Nunca commitear `.env.local`.
 
 ## Usuario de prueba
 
-Correr `npm run seed` una vez con `.env.local` completo. Crea (o reutiliza) el usuario y reemplaza su placard por 27 prendas de ejemplo.
+Correr `npm run seed` una vez con `.env.local` completo. Crea (o reutiliza) el usuario, reemplaza su placard por 27 prendas de ejemplo y carga las seis paletas.
 
 - Email: `prueba@pilcha.app`
 - Contraseña: `pilcha-prueba-2026`

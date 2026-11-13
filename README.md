@@ -32,6 +32,13 @@ TP Final de Programación Multimedial III (UMAI). Consigna: https://github.com/l
 
 **Override de `jose`.** `firebase-admin` usa `jwks-rsa`, que carga `jose` con `require()`. Desde `jose` 6 la librería es solo ESM, y en el runtime de Vercel ese `require()` falla (`ERR_REQUIRE_ESM`) y tira abajo todas las rutas que usan Firebase Admin. En `package.json` forzamos `jose` 5 solo para `jwks-rsa` (`overrides`), que trae versión CommonJS y tiene las mismas dos funciones que usa (`importJWK` y `exportSPKI`).
 
+## Placard
+
+- **Alta, edición y baja** con Server Actions (`lib/actions/prendas.js`). Cada una verifica la sesión con `requireUser()` y escribe solo bajo `users/{uid}/prendas`.
+- **Una sola validación** (`lib/prendas.js`) usada por el formulario del navegador y por la Server Action, así no puede haber diferencias entre las dos.
+- **Filtros en la URL.** El listado es un Server Component y los filtros son un `<form method="GET">` común: no hace falta estado de cliente y la búsqueda se puede compartir.
+- **Foto opcional** a Vercel Blob. Si se reemplaza o se elimina la prenda, se borra la foto vieja.
+
 ## Autenticación
 
 1. El usuario se loguea con Firebase Auth en el navegador y obtiene un ID token.
@@ -64,8 +71,16 @@ La app queda en http://localhost:3000.
 | `npm run build` | Build de producción |
 | `npm run start` | Sirve el build |
 | `npm run lint` | ESLint |
+| `npm run seed` | Crea el usuario de prueba con un placard cargado (necesita `.env.local`) |
 | `npm test` | Pruebas del motor de recomendación y de colores (`node:test`, sin dependencias) |
 
 ## Variables de entorno
 
 Ver `.env.example`. Nunca commitear `.env.local`.
+
+## Usuario de prueba
+
+Correr `npm run seed` una vez con `.env.local` completo. Crea (o reutiliza) el usuario y reemplaza su placard por 27 prendas de ejemplo.
+
+- Email: `prueba@pilcha.app`
+- Contraseña: `pilcha-prueba-2026`

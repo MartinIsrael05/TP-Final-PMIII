@@ -1,13 +1,13 @@
-// Crea el usuario de prueba con un placard cargado. Se puede correr las veces
-// que haga falta: si el usuario ya existe lo reutiliza y reemplaza sus prendas.
+// Crea el usuario de prueba con un placard cargado y las paletas de colores.
+// Se puede correr las veces que haga falta: si el usuario ya existe lo
+// reutiliza, reemplaza sus prendas y vuelve a escribir las paletas.
 //
 // Uso:  npm run seed
 // (lee las credenciales de .env.local con la opción --env-file de Node)
-//
-// Más adelante este script también carga las paletas (fase 7).
 const { initializeApp, cert } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const { PALETAS } = require("./paletas.seed.js");
 
 const USUARIO = {
   email: "prueba@pilcha.app",
@@ -120,7 +120,19 @@ async function main() {
   });
   await batch.commit();
 
+  // 4. Paletas. El id del documento es la clave de clima, así volver a
+  // correr el seed las actualiza en lugar de duplicarlas.
+  const paletasBatch = db.batch();
+  PALETAS.forEach((paleta) => {
+    paletasBatch.set(db.collection("paletas").doc(paleta.clima), {
+      ...paleta,
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+  });
+  await paletasBatch.commit();
+
   console.log(`${PRENDAS.length} prendas cargadas.`);
+  console.log(`${PALETAS.length} paletas cargadas.`);
   console.log(`Ingresá con ${USUARIO.email} / ${USUARIO.password}`);
 }
 
